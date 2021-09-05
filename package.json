@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "amqplib": "^0.8.0"
+  },
+  "name": "charo_pushserver",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/node": "^16.7.10",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TeamChaRo/ChaRo_PushServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TeamChaRo/ChaRo_PushServer/issues"
+  },
+  "homepage": "https://github.com/TeamChaRo/ChaRo_PushServer#readme",
+  "description": ""
+}
