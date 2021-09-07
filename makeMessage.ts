@@ -2,8 +2,8 @@ export default function (msg: Object, id: number, date: string): Object {
   const code = msg["pushCode"];
   let push = {
     data: {
-      push_code: code,
-      push_id: id,
+      push_code: code.toString(),
+      push_id: id.toString(),
       image: msg["image"],
       token: msg["token"],
       date: date,
