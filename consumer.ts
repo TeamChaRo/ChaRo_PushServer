@@ -4,6 +4,14 @@ import dotenv from "dotenv";
 
 import makeMessage from "./makeMessage";
 
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./push_key.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
 const envFound = dotenv.config();
 if (envFound.error) {
   // This error should crash whole process
@@ -62,8 +70,6 @@ amqp.connect("amqp://127.0.0.1", function (err, conn) {
             let key = msg.fields.routingKey;
             msg = JSON.parse(msg.content.toString());
 
-            console.log("[General] %s: ", key, msg);
-
             //PUSH db 삽입
             const query = `INSERT INTO push(pushCode, image, token, createdAt) VALUES(${msg.pushCode}, '${msg.image}', '${msg.token}', '${date}');`;
             connection.query(query, (err, results, field) => {
@@ -72,7 +78,16 @@ amqp.connect("amqp://127.0.0.1", function (err, conn) {
               const push = makeMessage(msg, results.insertId, date);
               console.log(push);
 
-              // 여기서 firebase-admin 연결해서 전송
+              // push 전송
+              admin
+                .messaging()
+                .send(push)
+                .then((response) => {
+                  console.log("Successfully sent message:", response);
+                })
+                .catch((error) => {
+                  console.log("Error sending message:", error);
+                });
             });
           },
           {
