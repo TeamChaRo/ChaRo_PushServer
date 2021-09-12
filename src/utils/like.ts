@@ -11,15 +11,17 @@ function promiseQuery(query: string) {
   });
 }
 
-export default async function (
-  fromEmail: string,
-  toEmail: string,
-  postId: string
-) {
+export default async function (fromEmail: string, postId: string) {
   // fromEmail : 좋아요 한 사람(누가)
   // toEmail : 좋아요를 받은 사람(나)
   // 최종적으로 좋아요가 눌린 나의 게시물로 이동
   const date = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+  // 작성자 email 찾기
+  const getAuthor = `SELECT UserEmail FROM detail WHERE PostId =${postId}`;
+
+  const author = (await promiseQuery(getAuthor)) as Object[];
+  const toEmail = author[0]["UserEmail"];
 
   const userInfo = `SELECT user.email, user.nickname, user.profileImage, user.fcmToken
     FROM user WHERE email = '${fromEmail}' or email = '${toEmail}';`;
