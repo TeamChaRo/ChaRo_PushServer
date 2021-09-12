@@ -32,11 +32,10 @@ export default async function (email: string, postId: number) {
 
       for (let follower of followers) {
         const query = `INSERT INTO push(pushCode, UserEmail, image, token, createdAt, title, body)
-        VALUES(1, '${follower["email"]}', '${image}', ${postId}, '${date}', "팔로잉",  '${body}');`;
+        VALUES(1, '${follower["email"]}', '${image}', ${postId}, '${date}', "팔로우",  '${body}');`;
 
         db.query(query, (err, results, field) => {
           if (err) console.log(err);
-          console.log(results);
 
           const push: pushDTO = {
             data: {
@@ -45,7 +44,7 @@ export default async function (email: string, postId: number) {
               image: image,
               token: postId.toString(),
               date: date,
-              title: "팔로잉",
+              title: "팔로우",
               body: body,
             },
             token: follower["fcmToken"],
