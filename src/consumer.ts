@@ -5,6 +5,7 @@ import connectFirebase from "./loaders/firebase";
 import connectDB from "./loaders/connect";
 
 import sendFollow from "./utils/follow";
+import sendFollowing from "./utils/following";
 
 connectDB();
 connectFirebase();
@@ -26,6 +27,7 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
           console.log("[AMQP] reconnecting failed");
         } else {
           console.log("[AMQP] reconnected");
+          conn = connection;
         }
       });
     }, 1000);
@@ -66,6 +68,36 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
             const postId = msg.token;
 
             sendFollow(email, postId);
+          },
+          {
+            noAck: true,
+          }
+        );
+      }
+    );
+
+    //누가 나를 팔로우했을 때(following)
+    channel.assertQueue(
+      "",
+      {
+        exclusive: true,
+      },
+      (err2, q) => {
+        if (err2) throw err2;
+
+        console.log("[Following] Waiting for logs. To exit press CTRL+C");
+
+        channel.bindQueue(q.queue, exchange, "following");
+
+        channel.consume(
+          q.queue,
+          (msg) => {
+            msg = JSON.parse(msg.content.toString());
+
+            const fromEmail = msg.email;
+            const toEmail = msg.token;
+
+            sendFollowing(fromEmail, toEmail);
           },
           {
             noAck: true,
