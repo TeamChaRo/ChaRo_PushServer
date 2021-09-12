@@ -6,6 +6,7 @@ import connectDB from "./loaders/connect";
 
 import sendFollow from "./utils/follow";
 import sendFollowing from "./utils/following";
+import sendLike from "./utils/like";
 
 connectDB();
 connectFirebase();
@@ -98,6 +99,37 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
             const toEmail = msg.token;
 
             sendFollowing(fromEmail, toEmail);
+          },
+          {
+            noAck: true,
+          }
+        );
+      }
+    );
+
+    // 내가 작성한 게시물을 누가 추천(하트)했을 때 알림(like)
+    channel.assertQueue(
+      "",
+      {
+        exclusive: true,
+      },
+      (err2, q) => {
+        if (err2) throw err2;
+
+        console.log("[Like] Waiting for logs. To exit press CTRL+C");
+
+        channel.bindQueue(q.queue, exchange, "like");
+
+        channel.consume(
+          q.queue,
+          (msg) => {
+            msg = JSON.parse(msg.content.toString());
+
+            const fromEmail = msg.email;
+            const toEmail = msg.token[0];
+            const postId = msg.token[1];
+
+            sendLike(fromEmail, toEmail, postId);
           },
           {
             noAck: true,
