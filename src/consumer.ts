@@ -126,10 +126,9 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
             msg = JSON.parse(msg.content.toString());
 
             const fromEmail = msg.email;
-            const toEmail = msg.token[0];
-            const postId = msg.token[1];
+            const postId = msg.token;
 
-            sendLike(fromEmail, toEmail, postId);
+            sendLike(fromEmail, postId);
           },
           {
             noAck: true,
