@@ -37,7 +37,7 @@ export default async function (fromEmail: string, toEmail: string) {
   }
 
   const query = `INSERT INTO push(pushCode, UserEmail, image, token, createdAt, title, body)
-        VALUES(1, '${toEmail}', '${image}', '${fromEmail}', '${date}', "팔로잉",  '${body}');`;
+        VALUES(2, '${toEmail}', '${image}', '${fromEmail}', '${date}', "팔로잉",  '${body}');`;
 
   db.query(query, (err, results, field) => {
     if (err) console.log(err);
