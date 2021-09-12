@@ -66,7 +66,7 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
             msg = JSON.parse(msg.content.toString());
 
             const email = msg.email;
-            const postId = msg.token[0];
+            const postId = msg.token;
 
             sendFollow(email, postId);
           },
@@ -96,7 +96,7 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
             msg = JSON.parse(msg.content.toString());
 
             const fromEmail = msg.email;
-            const toEmail = msg.token[0];
+            const toEmail = msg.token;
 
             sendFollowing(fromEmail, toEmail);
           },
