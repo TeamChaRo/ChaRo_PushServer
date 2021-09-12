@@ -41,7 +41,7 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
     if (err1) {
       throw err1;
     }
-    const exchange = "direct_logs";
+    const exchange = "direct";
 
     channel.assertExchange(exchange, "direct", {
       durable: false,
@@ -66,7 +66,7 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
             msg = JSON.parse(msg.content.toString());
 
             const email = msg.email;
-            const postId = msg.token;
+            const postId = msg.token[0];
 
             sendFollow(email, postId);
           },
@@ -96,7 +96,7 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
             msg = JSON.parse(msg.content.toString());
 
             const fromEmail = msg.email;
-            const toEmail = msg.token;
+            const toEmail = msg.token[0];
 
             sendFollowing(fromEmail, toEmail);
           },
