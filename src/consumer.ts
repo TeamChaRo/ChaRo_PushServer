@@ -65,8 +65,8 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
           (msg) => {
             msg = JSON.parse(msg.content.toString());
 
-            const email = msg.email;
-            const postId = msg.token;
+            const email = msg["email"];
+            const postId = msg["token"];
 
             sendFollow(email, postId);
           },
@@ -95,8 +95,8 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
           (msg) => {
             msg = JSON.parse(msg.content.toString());
 
-            const fromEmail = msg.email;
-            const toEmail = msg.token;
+            const fromEmail = msg["email"];
+            const toEmail = msg["token"];
 
             sendFollowing(fromEmail, toEmail);
           },
@@ -125,8 +125,8 @@ amqp.connect("amqp://127.0.0.1", (err, conn) => {
           (msg) => {
             msg = JSON.parse(msg.content.toString());
 
-            const fromEmail = msg.email;
-            const postId = msg.token;
+            const fromEmail = msg["email"];
+            const postId = msg["token"];
 
             sendLike(fromEmail, postId);
           },
